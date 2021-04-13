@@ -1,6 +1,7 @@
 package com.pycogroup.superblog.service;
 
 import com.pycogroup.superblog.model.Article;
+import com.pycogroup.superblog.model.Category;
 import com.pycogroup.superblog.model.User;
 import com.pycogroup.superblog.repository.ArticleRepository;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -24,7 +28,7 @@ public class ArticleServiceTest {
 
 	@Autowired
 	private ArticleService articleService;
-
+	private ArrayList<String> TEST_ID = new ArrayList<>();
 	@Before
 	public void init() {
 		mongoTemplate.remove(Article.class).all();
@@ -40,6 +44,7 @@ public class ArticleServiceTest {
 				.author(author)
 				.build();
 			mongoTemplate.save(article);
+			TEST_ID.add(article.getId().toString());
 		}
 	}
 
@@ -47,5 +52,24 @@ public class ArticleServiceTest {
 	public void testFindAllMustReturnEnoughQuantity() {
 		List<Article> articleList = articleService.getAllArticles();
 		Assert.assertEquals(INIT_ARTICLE_NUMBER, articleList.size());
+	}
+	@Test
+	public void testCreateArticleGivenArticleWhenSuccessThenReturnArticle() {
+		mongoTemplate.remove(Article.class).all();
+		mongoTemplate.remove(User.class).all();
+		mongoTemplate.remove(Category.class).all();
+		User author = mongoTemplate.save(User.builder()
+				.name(RandomStringUtils.random(40))
+				.email("fake"+RandomStringUtils.randomAlphabetic(5)+ "@.local")
+				.build());
+		Category category = mongoTemplate.save(Category.builder().name("Book").build());
+		Article article = articleService.createArticle(Article.builder()
+				.title("Article 1")
+				.content("Lorem ..")
+				.author(author)
+				.category(category)
+				.build());
+		Assert.assertEquals("Article 1", article.getTitle());
+		Assert.assertEquals(author.getId().toString(), article.getAuthor().getId().toString());
 	}
 }

@@ -8,4 +8,5 @@ public interface ArticleRepository extends MongoRepository<Article, ObjectId> {
     //Article findByArticleId(ObjectId id);
     Article findArticleById(ObjectId id);
     Article deleteArticleById(ObjectId id);
+    Article findByArticleId(ObjectId id);
 }

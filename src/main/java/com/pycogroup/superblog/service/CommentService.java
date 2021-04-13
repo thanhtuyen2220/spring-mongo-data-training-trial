@@ -8,6 +8,7 @@ public interface CommentService {
     List<Comment> getAllComments();
     Comment createComment(Comment comment);
     void deleteComment(String articleId,String commentId);
+    Comment getCommentById(String commentId);
 
 
 }
