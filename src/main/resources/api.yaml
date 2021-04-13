@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  description: API specification for SuperBlog microservice
+  version: v3
+  title: SuperBlog microservice API
+servers:
+  - url: http://localhost:8080/
+paths:
+  /articles:
+    get:
+      tags:
+        - getArticleList
+      summary: Get all articles
+      operationId: getArticleList
+      responses:
+        '200':
+          description: Get article list successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleListResponse'
+    post:
+      tags:
+        - createArticle
+      summary: Create article
+      operationId: createArticle
+      requestBody:
+        description: Create article
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/CreateArticleRequest'
+      responses:
+        '200':
+          description: Create article successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreationSuccessResponse'
+    put:
+      tags:
+        - categorizeArticle
+      summary: Update article
+      operationId: updateCategoryArticle
+      requestBody:
+        description: Update Category article
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCategoryArticleRequest'
+      responses:
+        '200':
+          description: Update Category successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreationSuccessResponse'
+  /users:
+    get:
+      tags:
+        - getUserList
+      summary: Get all users
+      operationId: getUserList
+      responses:
+        '200':
+          description: Get user list successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+
+    post:
+      tags:
+        - createUser
+      summary: Create user
+      operationId: createUser
+      requestBody:
+        description: Create user
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '200':
+          description: Create user successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreationSuccessResponse'
+  /categories:
+    post:
+      tags:
+        - createCategory
+      summary: Create category
+      operationId: createCategory
+      requestBody:
+        description: Create category
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryRequest'
+      responses:
+        '200':
+          description: Create category successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreationSuccessResponse'
+    get:
+      tags:
+        - getCategoriesList
+      summary: Get all category
+      operationId: getCategoryList
+      responses:
+        '200':
+          description: Get category list successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryListResponse'
+
+  /users/find-by-email:
+    get:
+      tags:
+        - search user by email
+      summary: Search user by email
+      operationId: findUserByEmail
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: Search user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+
+components:
+  schemas:
+    UserListResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponseModel'
+    UserResponseModel:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+
+    ArticleListResponse:
+      type: object
+      properties:
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleResponseModel'
+    ArticleResponseModel:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        authorName:
+          type: string
+        authorId:
+          type: string
+        categoryName:
+          type: String
+    CreateArticleRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        authorId:
+          type: string
+        categoryId:
+          type: string
+    CreateUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    CategoryListResponse:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryResponseModel'
+    CategoryResponseModel:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    CreateCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    UpdateCategoryArticleRequest:
+      type: object
+      properties:
+        articleId:
+          type: string
+        categoryName:
+          type: string
+
+    ObjectCreationSuccessResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        responseCode:
+          type: integer
+
+    ApiError:
+      type: object
+      properties:
+        faults:
+          type: array
+          items:
+            $ref: "#/components/schemas/Fault"
+        responseCode:
+          type: integer
+    Fault:
+      type: object
+      properties:
+        internalMessage:
+          type: string
+        code:
+          type: integer
+        userMessage:
+          type: string
+
+  examples:
+    InternalServerError:
+      value:
+        responseCode: 500
+        faults:
+          -:
+          userMessage: There're some error when processing this request. Please retry again or contact the site administrator for supporting
+          internalMessage: Internal server error
+          code: 1000
+          responseCode: 500
