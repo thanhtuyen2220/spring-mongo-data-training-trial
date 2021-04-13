@@ -69,15 +69,6 @@ public class ArticleController implements ArticlesApi {
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 
-	@Override
-	public ResponseEntity<ObjectCreationSuccessResponse> deleteArticle(String articleId) {
-		articleService.deleteArticle(articleId);
-		ObjectCreationSuccessResponse result = new ObjectCreationSuccessResponse();
-		result.setId(articleId);
-		result.setResponseCode(HttpStatus.CREATED.value());
-		return new ResponseEntity<>(result, HttpStatus.CREATED);
-	}
-
 	private ResponseEntity<ArticleListResponse> buildArticleListResponse(List<Article> articleList) {
 		ArticleListResponse articleListResponse = new ArticleListResponse();
 

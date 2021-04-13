@@ -3,7 +3,6 @@ package com.pycogroup.superblog.service;
 import com.pycogroup.superblog.model.Article;
 import com.pycogroup.superblog.repository.ArticleRepository;
 import com.pycogroup.superblog.repository.CategoryRepository;
-import com.pycogroup.superblog.repository.CommentRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,6 @@ public class ArticleServiceImp implements ArticleService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-
-	@Autowired
-	private CommentRepository commentRepository;
 
 	@Override
 	public List<Article> getAllArticles() {
@@ -59,10 +55,10 @@ public class ArticleServiceImp implements ArticleService {
 		return article;
 	}
 
-	@Override
+	/*@Override
 	public void deleteArticle(String articleId) {
-		//Article article = articleRepository.findArticleById(new ObjectId(articleId));
+		Article article = articleRepository.findByArticleId(new ObjectId(articleId));
 		articleRepository.deleteById(new ObjectId(articleId));
-		commentRepository.deleteAllByArticleId(articleId);
-	}
+		commentRepository.deleteAllByArticle_Id(articleId);
+	}*/
 }
