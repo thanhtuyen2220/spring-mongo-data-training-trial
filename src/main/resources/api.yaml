@@ -55,6 +55,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ObjectCreationSuccessResponse'
+  /articles/{ArticleId}:
+    delete:
+      summary: DeleteArticle
+      operationId: DeleteArticle
+      parameters:
+        - name: ArticleId
+          in: path
+          description: Article ID
+          required: true
+          schema:
+            type: string
+            format: string
+      responses:
+        '200':
+          description: Delete article successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreationSuccessResponse'
   /users:
     get:
       tags:
@@ -138,6 +157,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserListResponse'
+  /comments:
+    post:
+      tags:
+        - createComment
+      summary: Create Comment
+      operationId: createComment
+      requestBody:
+        description: Create Comment on article
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCommentRequest'
+      responses:
+        '200':
+          description: Create comment successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObjectCreationSuccessResponse'
 
 components:
   schemas:
@@ -221,6 +259,15 @@ components:
         articleId:
           type: string
         categoryName:
+          type: string
+    CreateCommentRequest:
+      type: object
+      properties:
+        content:
+          type: string
+        articleId:
+          type: string
+        userAuthorId:
           type: string
 
     ObjectCreationSuccessResponse:

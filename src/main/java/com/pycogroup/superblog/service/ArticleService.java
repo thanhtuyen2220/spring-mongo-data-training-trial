@@ -11,5 +11,5 @@ public interface ArticleService {
 	Article findArticleById(ObjectId id);
 	Article categorizeArticle(Article article, String categoryName);
 	Article categorizeOldArticle(Article article,String categoryName);
-	//void deleteArticle(String articleId);
+	void deleteArticle(String articleId);
 }
